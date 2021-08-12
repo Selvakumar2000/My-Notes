@@ -1,0 +1,61 @@
+5.Project Structure
+------------------------------
+1.src
+  app
+
+    home(1)
+    ----home ts|html|css
+
+    user(2)
+    ----user ts|html|css
+    ----signup(2.[i])
+	----signup ts|html|css
+    ----login(2.[ii])
+	----login ts|html|css
+
+    user-details(3)
+    ----user-details ts|html|css
+    ----details-form(3.[i])
+	----details-form ts|html|css
+ 
+    suggestions(4)
+    ----suggestions ts|html|css
+    ----display-allDetails(4.[i])
+	----display-allDetails ts|html|css
+    ----#####(4.[ii])
+	----##### ts|html|css
+    shared(5)
+    ----user-details.service.ts
+    ----user-details.model.ts
+    ----user.service.ts
+
+    auth(6)
+    ----auth.guard.ts
+    ----auth.interceptor.ts
+
+  module.ts
+
+Description:
+--------------
+1.Create new project >ng new DatingPortal
+2.Would you like to add Angular routing? (y/N) y
+3. Which stylesheet format would you like to use? (Use arrow keys)
+> CSS
+4.Create HomePage component >ng g c homepage
+5.Create User component  >ng g c user
+  #Create child-component of user
+	 i.signup >ng g c user/signup
+	ii.login  >ng g c user/login
+	
+6.Create User-Details component >ng g c user-details
+  #Create child-component of user-details
+	 i. details-form  >ng g c user-details/details-form
+
+7.Create Suggestions component >ng g c suggestions
+ #Create child-component of suggestions
+	 i.display-allDetails >ng g c suggestions/display-allDetails
+
+8.Create service file for user-details component -> ng g s shared/user-details
+  Create a model file for user-details -> ng g class shared/user-details --type=model
+  Create service file for user -> ng g s shared/user
+	

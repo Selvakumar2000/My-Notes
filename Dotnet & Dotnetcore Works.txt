@@ -1,0 +1,60 @@
+Dot Net -->provides FCL and CLR=>Application Portability and Automtic Garbage Collector(automaticmemory management)
+----------------------------------
+1.Frame Work Class(FCL) library provides UI,Database Connectivity,Cryptography,Web Development etc..
+2.Provides Library and Run time environment
+3..Net programs are runs in Common Language Runtime(CLR) 
+4.Compilation in two phase ->
+ i)Language Compiler
+Respective Compiler compiles source code(cs,vb,other) and convert it into Microsoft Intermediate Language(MSIL)(common to all)
+ ii)Just In Time(JIT)
+JIT compiler converts MSIL into machine code
+5.Common Language Specification(CSL) and Common Type System(CTS)
+6.For example we are going to print the message in C# using writeline() methodd of Console class.This class resides in System namespace assembly which is provided by
+FCL of .net framework.FCL provides so many assemblies which are resides in GAC(Global Assembly Cache).GAC contains strong named assembly
+
+Non .NET Application
+--------------------
+=>High level programming language(C++,C#,F# etc..)-->Respective Compiler converts it into Native Code/Machine Code-->OS
+=>This native code can not abe to run in different Operating System.
+
+.NET Application
+-------------------
+=>High level programming language(C++,C#,F# etc..)-->Respective Compiler converts it into Intermediate Language(IL) .dll or .exe file-->CLR have JIT which is a 
+Just In Time Compiler which converts IL to Native Code/Machine Code-->OS
+=>CLR checks manifest(information about assembly dependencies) and assembly code(.dll or .exe)
+=>IL(also called as CIL,MSIL,Managed Code) can run on any operation system which have .net framework(CLR)
+"the same will happened in java"  compiler converts .java file which is our source code into .class file which is a byte code.Byte code will be converted into
+native code/machine code using JVM .........
+
+6.dotnet new console -->to create console application
+7.dotnet run name_of_cs_file-->to run console application
+
+8.dotnet new webapp -o Testwebapp-->to create web application
+9.dotnet run -->to run dotnet web application
+10.Entry point of ASP .Net core webapplication is program.cs-->calls configure and configureServices method of 
+startup.cs during run time
+
+
+
+ASP.NET
+--------------------------
+1.Web application framework developed by microsoft to build dynamic data driven web application and web services.
+2.It is a subset of .NET framework and it is the successor to classic ASP(Active Server Page)
+3.ASP.NET application runs unders microsoft IIS(Internet Information Service)
+4.Calling business logics from controller --> https://www.youtube.com/watch?v=sWJayOop4k8
+
+Blazzor
+----------------------------
+1.USE C# code for both front end and backend
+2.browser only support html and js...here Web Assembly(WSAM) is used..Blazor can run the C# code directly in webbrowser using WSAM.
+3.Single Page Application framework
+4.Build client  side web apps. using C# and .NET instead of JS.
+
+Progressive Web Apps
+------------------------
+1.Load instantly
+2.Capable of working offline
+3.App launch options
+4.Automatic self-updates
+5.Support for push notifications
+6.Own app window

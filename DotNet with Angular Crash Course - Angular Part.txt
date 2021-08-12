@@ -1,0 +1,128 @@
+Udemy Course - Asp.net core with Angular (Github Link --> https://github.com/TryCatchLearn/DatingApp)
+------------------------------------------
+1.Structural Directives --> modifies the domain object model in our html in someway (*ngFor,*ngIf,*dropdown-menu)
+2.Angular is a casesensitive
+3.Angular vs JQuery (DOM Manupulation issue)
+4.add ngbootstrap --> ng add ngx-bootstrap  (adds both bootstrap and ngx-bootstrap)
+5.npm install font-awesome --> to add stylish icons into our applications
+6.Learn about ssl certificate and git 
+
+For Any Application:
+Requirements:
+--------------
+1.Users should be able to register
+2.Users should be able to login
+3.Users should be able to view other users
+4.Users should be able privately message others
+
+Important commands for skip html/css/test file creation:
+---------------------------------------------------------
+1.ng g c componentName -is -it --skip-tests
+      -is for inline css, preventing style file creation
+      -it for inline template, preventing html file creation
+      --skip-tests to prevent .spec file(test file) creation
+
+TemplateForms:
+---------------
+1.Two-Way Binding: We can bind data or properties in our component and display them in our templates and we can take data from something enters in the form and
+update something inside our component. (ts file(.ts) --> template file(.html) & template file(.html)-->ts file(.ts))
+2.One of the example is declare a variable users:any in ts file and user provided data in input field is taken and updated the users variable with the value
+which was entered in the form field by the user.
+3.Import FormsModule
+4.Create a variable inside the .ts file
+5.define #loginForm="ngForm" inside form tag which tells that we use angular form so that we can two way binding and also calls the method with appropriate event
+like click,submit,ngSubmit(which works on both hit the submit button and hit enter) .(ngSubmit)="login()"
+5.define name property inside input tag
+6.Update the name property within the variable using two way binding syntax
+7.Square Brackets --> for receiving from our components
+  Parantheses --> data goes away (we are going from our template to our components).
+
+Feature of using Service file in our Angular Application:
+---------------------------------------------------------
+1.Organized 
+2.Use of Injectable Decorator --> that the created service can be injected into any other components or services in our application (@Injectable)
+3.Provided In Roots (providedIn: 'root')--> in appmodule we have a providers array and it is empty.no need to mention our service inside that provided array
+(older version of angular follow this but not now..its updated)
+4.service is a singleton --> once we inject our service into a component,it gets initialized and it will stay initialized untill the application is closed 
+/disposed/user close the browser/user move away from our application
+5.mostly used for handling http requests
+
+Observables:
+-------------
+1.New standard for managing async data included in ES7(EcmaScript2017 which compatable with modern browsers)
+2.Introduce in Angular2
+3.Observables are lazy collections of multiple values
+4.Used in HTTP requests and we also using them when we want our component to observe values.It notify the changes(HTTP requests and Responses) and works accordingly.
+5.Need to subscribe the observable for working with the data which the observable holds.(similar to youtube)
+			Promise   						Observable
+           ------------------------------------------------------------------------------------------------------
+		Providing a single future value 			  Emits multiple value
+			Not lazy 						  lazy
+		      cannot cancel  					able to cancel and can use with filter,map,reduce and other operators
+	              synchronous 					       asynchronus
+
+6.Pipe -> If you want to transform the stream of data of observable before we subscribe this we can use pipe(rxjs for angular)
+7.On subscribing the observable,  we have 3 parts: response(data in the observable)res=>{},error(anything other than 200OK response)error=>{},additional()=>{}
+8.Other than subscribe we have toPromise() method.It comes from JavaScript -->another way to get data from observable
+9.async pipe subscribe and unsubscribe automatically from the observables.
+
+1.ng g class _model/user --type=model --> create a class file which implies the LoginDto property
+2.!! turns the object into boolean
+
+Observables and Subscribe.....
+-------------------------------------
+		Subject Type 				     Each next Subscribe Receives
+	------------------------------------------------------------------------------------------------------
+	          Subject 					Only upcoming values
+		Behaviour Subject 			One previous value and upcoming values
+		Replay Subject  			All previous values and upcoming values
+		Async Subject 				The latest value when the stream will close
+
+Async Pipe:
+----------------
+1.prevent memory leaks,automatically unsubscribe the data once it is completed..if we subscribed other than http requests, we will use aync pipe.
+2. === operator:
+The triple equals operator ( === ) returns true if both operands are of the same type and contain the same value. If comparing different types for equality,
+the result is false.
+
+Communicate between two components:
+Reference => https://stackoverflow.com/questions/42097480/how-to-use-a-variable-from-a-component-in-another-in-angular
+
+Angular Routing:
+-------------------
+1.PathMatch ->
+
+Angular Toastr Service:
+-----------------------
+1.Install npm-toastr and browser-animations ->  npm install ngx-toastr for popup notifications.refer this site => https://www.npmjs.com/package/ngx-toastr
+					        npm install @angular/animations --save 
+
+Route Guard:
+--------------
+1.ng g guard auth 
+Guard Provides 4 interface --> canActivate, canDeactivate, CanActivateChild, canLoad 
+select canActivate interface --> activate the route or not. If all guards return true, navigation continues.If any guard return false,then the navigation is cancelled.
+
+ng-container --> does not generate any html..not interfere with any html elements..best when you use conditional statements
+npm install bootswatch --> for free bootstrap theme   reference --> https://bootswatch.com/
+
+2.create a seperate file for storing third-party modules(other than angular specific modules) to make app module to simple and tidy.
+
+Error Handling(using interceptors):
+---------------
+1.When we encountered any error(400,401,404,500...) in our angular application,we handle them at a global level inside our application.To achieve this using
+Http Interceptors.
+2.ng g interceptor then give a name.
+intercept(intercept the request that goes out, the response that comes back in the next where we handle the response) method --> it returns an observable
+so we can perform operations using pipe().
+catchError(rxjs operator) -->catch the error response(HttpErrorResponse)
+modalStateErrors????
+
+3.provide interceptor in app module -->
+providers: [
+    {provide:HTTP_INTERCEPTORS,useClass:ErrorInterceptor,multi:true}
+  ],
+multi -> we don't want to replace the interceptor comes with angular..we want to add this to the interceptors.
+we can have multiple interceptors 
+es2018 and es2019..????
+? -> optional chaining parameter

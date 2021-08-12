@@ -1,0 +1,40 @@
+Employee Web API Creation:
+-----------------------------
+1.Enable CORS
+  All web api  projects come with the security which blocks request coming from different domains.
+  We write some code(instructions) to disable that security and allow the request to be served.
+
+2.Make Json Serializer as default
+  Add mvc.newtonsoft json from NuGet package manager -> version 3.1.16
+=============>run the project and see the output in the default browser<=================
+
+3.Create Models folder in the project and add class file in it.
+  class file -->Represents tables in the sql server database
+  provide database connection credentials in appsetting.json file
+
+
+4.Add Controller to add API methods for department table and employee table
+  Controllers --> add --> controller --> API Controller(empty) --> Give name
+  use raw query / stored procedure  / entity framework for database commands
+  define different API (get,post,put,delete) in the controller
+  To work with database inside each API we need SQL Client package
+  Test the API with Postman by using URLs. --> "url_from_browser"/api/controller_name  for post method=> body ->raw text ->JSON
+  Create an API for upload the images into the folder and mention it in Starup.cs file
+                        
+
+Project Structure
+-------------------------
+
+	     i.Employee Component(add-edit-emp,show-emp)	                             (send/receive data)
+5.Angular -----------------------------------------------> Shared Service <--------------------------------------------> Employee Web API
+             ii.Dept. Component(add-edit-dep,show-dep)
+
+	i.create new project  -->companyApp
+	ii.add component      -->employee ,department
+	iii.add subcomponent  -->add-edit-emp, show-emp, add-edit-dep, show-dep
+	iv.add service        -->shared 
+=>import service-module, http client module,form module in app.module.ts and add service module into providers
+=>Observeable used to handle asynchronous requests and responses
+=>add logic in service file for consumes all the API methods
+  
+=>Add Routing in the application

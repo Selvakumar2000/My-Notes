@@ -1,0 +1,226 @@
+Dotnet with Angular Crash Course:
+1.Dotnet 5
+2.Angular  to run type script code into browser engine we need node js. (install nove nvm for easy switching between all other version of node js.)
+
+Dot Net Core API:
+1.Program.cs --> CreateHostBuilder() function (it load configurations into our application and it injects more services like appsetting,launchsetting jsons....returns hostbuilder)
+  --> Startup class (configuration is injected here). ConfigureServices method is a dependency injection container and called at runtime
+    Configure method ->it configure the HTTP request, it take cares HTTP redirection(end point redirection),authorization and routing.
+
+2.dot net watch run --> we can modify the code during the application is in running condition.
+
+Entity FrameWork:
+------------------
+=>An Object Relation Mapper and it translates our code into sql commands that update our tables in the database.
+=>Before EF, ADO is used...we have to write each and every line of codes for make connection with database,retrieving the data and manupulate it.It is a sequal 
+of code which would be in the form of strings and it is very easy to make mistakes.
+=>To overcome all this drawbags, microsoft introduce Entity Framwork (comes with DbContext class --> bridge between our entities and database).DbContext is a
+primary class used to interacting with the database.
+=>EF allows us to interact or query our databse using Link Queries
+
+EF Features:
+------------
+Querying
+Change Tracking
+Saving (SaveChanges() method provide by DbContext class)
+Concurrency
+Transaction
+Caching
+Builtin-Conventions (Id changes into ID by default)
+Configurations
+Migrations (Create Database Schema automatically)
+
+=>Sqlite is simple,cross platform and portable,we don't need a server.It just add a file for database into our application.
+
+Steps :
+--------
+
+Adding EF to our projects:
+---------------------------
+=>install entityframework core(version is what the version of ASP.net), entityframework core sqlserver and entityframework core tools from nuget package manager
+------for all version is --> 3.1.16----------(matches with runtime)
+
+1.Create a Model class's(Entities)
+2.Create Context class's --> inherit DbContext class
+3.Define constructor with options parameter inside context class
+4.Write a property which have a type of a model class and specify the table name which you want.
+5.Create a Connection string in appsettings.json
+6.To inject data we need to configure our database inside startup class.(define the AddDebContext<>() method and inside define UseSqlServer() method)
+7.Perform migration 
+8.Add a empty controller and inject DbContext inside the constructor and mention [ApiController] and [Route("api/[controller]")] for accessing the controller
+from clinet side and inherit ControllerBase class(which is of base class fir a MVC controller without view support) and write an API method
+  Note**  by default API methods returns the responses back in camelcase(userName,firstName)
+9.CORS
+------
+=>CORS (Cross Origin Resource Sharing)==> it is a security mechanism built in modern web browsers....blocks http request from client side or blocks http requests 
+=>comes from not in the same origin. (API is running on localhost:5001 and client server is running on localhost:4200 different origin access the different origin).
+=>Not allowed to go and get resources from something that exists in a different origin.
+=>call UseCors() between UseRouting() and UseEndPoints().Prior to UseAuthentication()
+
+Source Control:
+----------------
+1.git init
+2.dotnet new gitignore --> not getting tracked
+
+Some issues:
+1.https://stackoverflow.com/questions/60159041/c-sharp-mvc-actionresult
+
+Data Transfer Object(DTO):
+---------------------------
+1.Pass data from Postman body and receive it from API
+2.Validation => database level using constraints..entity level or dto level using attributes[]
+3.FindAsync() --> find an entity with a given primary key
+4.FindOrDefaultAsync   -->return first element of the sequence or default value if the sequence contains no elements
+  SingleOrDefaultAsync -->return only element of the sequence or returns default value if the sequence is empty and throws exception, 
+                         if there is more than one element in the sequence
+
+
+Sample Code:
+"hlhS8IKn+1VizYKw1vtPVIcr7X+VXEQJHeOV90asjDCljlUbpne5b4DyN/f6N3LV5h5hXRJ+lhRWrixpM2KWDw=="
+0x0ECEE2ED54DB97AB7774F8A631770877821BFE96F90077049D119EE21B7C438C737205FD65DA3BD5C9BDE01D0B9B667F2241CEA5EDF6D4BB730EBBBE9EE1133B
+
+//Compare Hash: but it is wrong approach
+[HttpPost("Login")]
+        public async Task<byte[]> Login(LoginDto loginDto)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x=>x.UserName==loginDto.Username);
+            //if (user == null) return Unauthorized("Invalid UserName");
+
+            //using var hmac = new HMACSHA512(user.PasswordSalt);
+            using var hmac = new HMACSHA512();
+
+            //PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+            //PasswordSalt = hmac.Key
+
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+            //var computedSalt = hmac.Key;
+            byte[] Hasharr=new byte[computedHash.Length];
+            for(int i=0;i<computedHash.Length;i++)
+            {
+                //if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
+                Hasharr[i] = computedHash[i];
+            }
+            return Hasharr;
+        }
+
+
+/*Correct One*/
+
+/* inside login method */
+if (!VerifyPasswordHash(loginDto.Password, user.PasswordHash, user.PasswordSalt))
+                return Unauthorized("Invalid Password");
+
+/*Logic*/
+ private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != passwordHash[i]) return false;
+                }
+                return true;
+            }
+        }
+
+
+""Storing users passwords in database is a kind of big deal""
+-------------------------------------------------------------
+1.Storing password in clear text --> is a terrible(bad) idea
+2.Hashing the password using hashing algorithm (secure way) but the hashed values can be easily converted into original
+password using various online resources....(not an effective way for storing password in a database)
+3.hashing and Salting the password (Best Way)
+
+
+JWT Tokens:
+--------------
+1.Small enough to authenticate with API and make request with API
+2.Industry Standard for Tokens(RC7519)
+3.Self contained and can contain : Credentials , Claims and Other Security Related Informations
+4.Basically it is 3part lon string, each part is seperated by .
+	1st Part : Header of the Token and contains the algorithm(used to encrypt the signature) and type of token
+	2nd Part : Payload which contains informations about our claims(like user claiming something like register,login,submit personal details) and credentials
+	3rd Part : Signature and it is encrypted
+5.No cookies required
+6.Create a ITokenService interface and implement this interface in TokenService class.Load this into dependency injection container and tells whats the lifetime
+and howlong this service will be alive for after we start our applications.
+ Choices: 1.Sinngleton -> once it is created or instantiated and then it doesnot stops until our application stops.(i.e.It continues to use the resource)
+	  2.Scoped     -> it is scoped to the life time of the http request.Best for API and dealing HTTP requests
+			Once the request comes in then this service injected into particular controller and the new instance of this service is created
+			and when the request is finished and the service is disposed.
+	  3.Transient  -> this service is being created and destroyed as soon as the method is finished
+All these for token generation and processing.
+
+Reason for Using an Interface :It is easy to mock an interface(Testing) and best practice. Application testing is an important function of any software application.
+			       allow programmers to write and unit-test functionality in one area without calling complex underlying or collaborating classes.
+
+For JWT Authentication:Install
+1.System.IdentityModel.Token.JWT by Microsoft version 6.12.0(stable version)
+2.Microsoft.AspNetCore.Authentication.JwtBearer version 3.1.16
+Call UseAuthentication() before UseAuthorization()
+
+Extension Method:
+-----------------
+1.It enable us to add methods to existing types without creating a new derived type
+2.make tha class as static class
+3.Define a static method
+4.makes the startup class more clean and readable.
+
+Before Using Extension Methods:(Dependency Injection Container look line)
+-------------------------------
+public void ConfigureServices(IServiceCollection services)
+        {
+            //For Database Operation
+            services.AddDbContext<DataContext>(options =>
+            {
+                options.UseSqlServer(_config.GetConnectionString("DatingAppCon"));
+            });
+
+            //For Jwt Token Creation and Handling
+            services.AddScoped<ITokenService,TokenService>();
+
+            //For Authentication
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            
+            //For CORS policy
+            services.AddCors();
+
+            services.AddControllers();
+        }
+
+
+Exceptions:
+------------
+1.400 -> Bad Request
+  401 -> UnAuthorize
+  404 -> No Data Found
+  500 -> Internal Server Error
+
+if (env.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}   
+-->If exception occurs in anywhere in the middlewares,controllers,methods(like routing,http redirection and endpoints,controller), 
+it gets thrown up to the next level of exception handling(app.UseDeveloperExceptionPage();) .(if we were in development mode)
+-->app.UseDeveloperExceptionPage() it redirect us to the place where the exception occured.
+
+2.Now comment the if block and now if we access the server-error method,it will crash our application..if we not handle the exception using try-catch inside our method.
+But it is not a good practice,write a common class(gives a standard error message) to handle all the exceptions occurs in our app.
+
+3.Create a middleware class
+a middleware contains: constructor which have RequestDelegate(determines which comes next),ILogger(to log our exception(useful information) into terminal) and
+IHostEnvironment(to check which env we are working dev or prod.)
+ 
+ 
+    

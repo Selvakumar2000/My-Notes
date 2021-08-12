@@ -1,0 +1,60 @@
+I.
+1.Install Nodejs from google -->to check version node -v
+2.Install Angular and CLI -->npm install -g @angular/cli & to check version -->ng version
+3.Create Application -->ng new app_name
+4.Move to the Application -->cd app_name
+5.Run Server -->ng serve
+6.Create Routing -->ng generate module app-routing --flat --module=app
+  Routing:
+	i.add this line into head tag--> <base href="/">
+	ii.add RoutingModule and forRoot() method into imports of app.module.ts file and create Routes array.
+	iii.add router-outlet tag where you want to display your content
+7.To open our project into vs code --> code .
+II.
+1.Files and Folder in Angular
+i.package.json
+ii.node_modules
+iii.src
+	i.app
+	ii.assets
+	iii.environments
+	iv.index.html
+	v.main.js
+	vi.style.css
+
+III.
+1.Create new Components -->ng generate component login (ng g c login)
+	creating sub-component --> ng g c login/admin-login
+2.Create module(all the components present inside the module)-->ng generate module userauth
+3.Create component inside the modue -->ng g c userauth/gallery
+4.Create Class file-->ng g class class-name (generate 2 files,main file and testing file)
+5.Create service file-->ng g service api-service
+6.Build project -->ng build
+
+IV.Components
+1.Adv.:Write header/footer file one time and use it in all the pages
+2.Try to create many components like for header alone create header,search bar,menu components..we can easily 
+manage them.
+3.inline template,inline css,inline template inline css
+
+V.
+Flow of the Project
+i.index.html-->main module which is app-->app's html-->calls each components html
+2.if we made any change in json file,we must restart the server..strict ->flase(no need to mention datatype)
+
+VI.Module
+1.Contains components,services and pipes
+i.Example User Authentication Module have signup,login and forgot password component and have api services and helpers pipes
+ii.we have to register each module inside app.modules file
+
+VI.
+1.ng add @ng-bootstrap/ng-bootstrap -->Install boostrap
+2.ng add @angular/material or ng add @angular/material@6.2.1 and npm ls @angular/material-->to know the version
+
+
+                    Project -1 =>Dating Portal Development
+-------------------------------------------------------------------------------------------------
+1.Create default angular project and install angular meterial and bootstrap in it.
+
+To know about...
+i.ng container,position:relative attribute in css 

@@ -1,0 +1,85 @@
+Payment Details Project using ASP.NET core 3.16 (Entity Framework) with Angular 12
+
+Version Used:
+-----------------
+Angular CLI     : 12.0.3
+Node            : 14.17.0
+Package Manager : npm 6.14.13
+.Net core       : 3.1.4 
+Runtime and 
+Asp.Net Core    : 3.1.5
+Database        : SSMS
+
+Scaffolding
+------------
+Scaffolding is a technique used by many MVC frameworks like ASP.NET MVC, Ruby on Rails, Cake PHP and Node. JS etc., to generate code for 
+basic CRUD (create, read, update, and delete) operations against your database effectively. Further you can edit or customize this auto generated code according to 
+your need.
+
+Enable OpenAPI support to avoid the use of Postman
+
+C# language         ==> PascalCasing (most of the backend languages)
+Angular,JavaScript  ==> camelCasing(Client Side Programming languages)
+-----------------------------------this converion is taken by asp.net core---------------------------------------------------------
+
+
+
+Paymeny API Creation:
+-----------------------------
+1.Enable CORS
+  All web api  projects come with the security which blocks request coming from different domains.
+  We write some code(instructions) to disable that security and allow the request to be served.
+
+2.Make Json Serializer as default
+  Add mvc.newtonsoft json from NuGet package manager -> version 3.1.16
+=============>run the project and see the output in the default browser<=================
+
+3.Create Models folder in the project and add class file in it.
+  class file -->Represents tables in the sql server database
+  provide database connection credentials in appsetting.json file
+
+3(i)=>Migrations->Create database table automatically using entity framework
+	1.add a context class file inside the models which will decide the table attributes
+	2.inherit entity framework class(Dbcontext)
+	3.install entityframework core(version is what the version of ASP.net), entityframework sqlserver and entityframework core tools from nuget package manager
+for all version is --> 3.1.16
+	4.add connection string into startup class file
+Add Migration:
+----------------
+=>Add-Migration "InitialCreate"  - to create migration file
+=>Update-Database                - create db through migration file
+
+4.Add Controller to add API methods for PaymentDetail table
+  Controllers --> add --> controller --> API Controller(with action using entity framework) --> Give modelclass name,context name,controller name.
+		if error comes,install visualstudio web.codegeneration utils
+  debug it
+
+5.Project Structure
+------------------------------
+1.src
+  app
+    payment-details(1)
+    ----payment-details ts|html|css
+    ----payment-details form(1.[i])
+	----payment-details form ts|html|css
+    shared(2)
+    ----payment-details.service.ts
+    ----payment-details.model.ts
+
+	i.create component of payment-details 
+	ii.create child component of payment-details which is a payment-details-form
+	iii.create service file for payment-details component -> ng g s shared/payment-details
+	iv.create a model file for payment-details -> ng g class shared/payment-details --type=model
+	v.add bootstrap -> add css stylesheet ref in index.html
+	vi.add cdn for fontawesome in index.html -> https://cdnjs.com/libraries/font-awesome
+ 
+2.Specify Database attributes in model class file of shared folder
+Property 'paymentDetailsId' has no initializer and is not definitely assigned in the constructor.-->to avoid this error
+"strictPropertyInitialization": false, add this in tsconfig.json file
+
+3. Install npm-toastr and browser-animations-> npm install ngx-toastr for popup notifications.refer this site => https://www.npmjs.com/package/ngx-toastr
+					       npm install @angular/animations --save 
+
+4.Add-Migration MyFirstMigration -Context PaymentDetailsContext --> Add Migration for particular context
+  Update-Database -Context PaymentDetailsContext
+

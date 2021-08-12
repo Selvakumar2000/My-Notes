@@ -1,0 +1,18 @@
+Upload files into my Github Repository while using VS Code Editor(provides source control):
+-------------------------------------------------------------------
+1.Login to github
+2.Create New Repository (don't select add README file)
+3.Copy the origin
+4.Open CMD
+5.Move to the project folder
+6.Execute the following commands in cmd:
+	i.  git init
+	ii. ignore some folders/files which you want - mention it in .gitignore file
+	iii.git commit -m "first commit"
+	iv. git branch -M main
+	v.  git remote add origin https://github.com/Selvakumar2000/BankApplication-Client.git (got from github repository page)
+7.Stage all the changes using Source Control option in vs code--> click the + button (stage all the changes)
+8.Click the tick button(commit)
+9.Click this --> ... and select push
+ 
+

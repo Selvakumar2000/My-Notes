@@ -1,0 +1,81 @@
+Authentication (Signup and Login) Application Project using Angular12 and Asp.net core 3.1 (Identity Core)
+-------------------------------------------------------------------------------------------------
+1.Enable CORS
+  All web api  projects come with the security which blocks request coming from different domains.
+  We write some code(instructions) to disable that security and allow the request to be served.
+
+2.Make Json Serializer as default
+  Add mvc.newtonsoft json from NuGet package manager -> version 3.1.16
+=============>run the project and see the output in the default browser<=================
+
+3.Create Models folder in the project and add class file in it.
+  class file         -->Represents tables in the sql server database
+  class context file --> for creating table in database (Identity core db context)
+  provide database connection credentials in appsetting.json file
+
+3(i)=>Migrations->Create database table automatically using entity framework
+	1.add a context class file inside the models which will decide the table attributes
+	2.inherit entity framework class(Dbcontext)
+	3.install Microsoft.AspNetCore.Identity.EntityFrameworkCore, Microsoft.AspNetCore.Identity.UI, AspNetCore.Authentication.Jwtbearer,
+	  entityframework core(version is what the version of ASP.net), entityframework sqlserver and entityframework core tools from nuget package manager
+	4.add connection string into startup class file
+Add Migration:
+----------------
+=>Add-Migration "InitialCreate"  - to create migration file
+=>Update-Database                - create db through migration file
+
+4.Add Controller to add API methods for PaymentDetail table
+  Controllers --> add --> controller --> API Controller(Empty)
+For user authentication and user registration we have to use two class -->UserManager and SigninManager
+  Define API methods		
+  debug it
+
+5.Project Structure
+------------------------------
+1.src
+  app
+    user(1)
+    ----user ts|html|css
+    ----register(1.[i])
+	----register ts|html|css
+    ----login(2.[ii])
+	----login ts|html|css
+
+    home(2)
+    ----home ts|html|css
+
+    shared(3)
+    ----user.service.ts
+
+    auth(4)
+    ----auth.guard.ts
+    ----auth.interceptor.ts
+  module.ts
+
+         i.create component of user  
+	ii.create child component of user which is a register
+	iii.create child component of user which is a login
+	iv.create service file for user -> ng g s shared/user
+	v.add auth.interceptor.ts inside auth folder
+	vi.add bootstrap -> add css stylesheet ref in index.html
+	vii.add cdn for fontaqesome in index.html -> https://cdnjs.com/libraries/font-awesome
+ 
+2. Install npm-toastr -> npm install ngx-toastr for popup notifications.refer this site => https://www.npmjs.com/package/ngx-toastr
+
+3.ctrl+k,release and then press z --> switch to zen mode in visual studio code
+
+4.Design a form using ReactiveFormModule and design the form using formcontrol.=> build a form using FormBuilder and define form module
+in service.ts and inject it in module.ts
+
+5.Install npm-toastr -> npm install ngx-toastr for popup notifications.refer this site => https://www.npmjs.com/package/ngx-toastr
+
+6.Login and Logout using JWT --> https://jwt.io/
+
+Features:
+---(i)Login User can only view the details----
+makes the route secure or private we have to implement guards inside our application.It has a canActivate interface.
+	-- ng g g auth/auth
+
+---i(ii)if an user is already  loggedIn we prevent them to login again---
+
+---(iii)Usage of HttpInterceptor---
