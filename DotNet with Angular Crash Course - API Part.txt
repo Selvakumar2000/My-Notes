@@ -1,4 +1,4 @@
-Dotnet with Angular Crash Course:
+Dotnet with Angular Crash Course: (Lesson 8 and 10 need to understan it more clear)
 1.Dotnet 5
 2.Angular  to run type script code into browser engine we need node js. (install nove nvm for easy switching between all other version of node js.)
 
@@ -75,57 +75,6 @@ Data Transfer Object(DTO):
                          if there is more than one element in the sequence
 
 
-Sample Code:
-"hlhS8IKn+1VizYKw1vtPVIcr7X+VXEQJHeOV90asjDCljlUbpne5b4DyN/f6N3LV5h5hXRJ+lhRWrixpM2KWDw=="
-0x0ECEE2ED54DB97AB7774F8A631770877821BFE96F90077049D119EE21B7C438C737205FD65DA3BD5C9BDE01D0B9B667F2241CEA5EDF6D4BB730EBBBE9EE1133B
-
-//Compare Hash: but it is wrong approach
-[HttpPost("Login")]
-        public async Task<byte[]> Login(LoginDto loginDto)
-        {
-            var user = await _context.Users.SingleOrDefaultAsync(x=>x.UserName==loginDto.Username);
-            //if (user == null) return Unauthorized("Invalid UserName");
-
-            //using var hmac = new HMACSHA512(user.PasswordSalt);
-            using var hmac = new HMACSHA512();
-
-            //PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-            //PasswordSalt = hmac.Key
-
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-            //var computedSalt = hmac.Key;
-            byte[] Hasharr=new byte[computedHash.Length];
-            for(int i=0;i<computedHash.Length;i++)
-            {
-                //if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
-                Hasharr[i] = computedHash[i];
-            }
-            return Hasharr;
-        }
-
-
-/*Correct One*/
-
-/* inside login method */
-if (!VerifyPasswordHash(loginDto.Password, user.PasswordHash, user.PasswordSalt))
-                return Unauthorized("Invalid Password");
-
-/*Logic*/
- private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != passwordHash[i]) return false;
-                }
-                return true;
-            }
-        }
-
-
 ""Storing users passwords in database is a kind of big deal""
 -------------------------------------------------------------
 1.Storing password in clear text --> is a terrible(bad) idea
@@ -139,12 +88,37 @@ JWT Tokens:
 1.Small enough to authenticate with API and make request with API
 2.Industry Standard for Tokens(RC7519)
 3.Self contained and can contain : Credentials , Claims and Other Security Related Informations
-4.Basically it is 3part lon string, each part is seperated by .
-	1st Part : Header of the Token and contains the algorithm(used to encrypt the signature) and type of token
-	2nd Part : Payload which contains informations about our claims(like user claiming something like register,login,submit personal details) and credentials
-	3rd Part : Signature and it is encrypted
-5.No cookies required
-6.Create a ITokenService interface and implement this interface in TokenService class.Load this into dependency injection container and tells whats the lifetime
+4.Basically it is 3part long string, each part is seperated by .
+	1st Part : Header of the Token and contains the algorithm(used to encrypt the signature in the 3rd part of the token) and type of token
+	2nd Part : Payload which contains informations about our claims and credentials(we can have NameIdentifier(what the username is) and Roles(what roles the user have))
+	3rd Part : Signature and it is encrypted by the server using a secure key and this key never ever leaves the server.
+**Only part of the token that is encrypted is the signature, everything else is very easily obtained by decoding the token.
+**It's just  very simple to get information out of the token but what we cannot  do easily is modify the token in anyway  and except our API to accept it because
+that will change the entire structure of the token and the signature wouldnot be verified.
+ 
+How It Works(Token Authentication):
+----------------------------------
+1.When user logs in and sends the username and password to the server.
+2.The server will validate their credentials and return a jason web token that the client will store locally on their machine(ex:browser local storage).
+3.Send the jason web token with every single request. So anytime that we want to access something that's protected by authentication on the server, we send out 
+jwt with that request.
+4.On the client side, we add an authentication header to the request and then the server will look at the token and verify that the token is valid.Now the server side,
+the token will have access to the private secure key that's stored on the server.
+5.Then the server is able to verify that the token is valid without needing to make a call to the database.
+6.Finally, the server says that token is OK and sends the response.
+
+Advantages:
+------------
+1.No session to manage
+2.Small and Lightweight
+3.No cookies required - Mobile Friendly
+4.Performance - Once a token is issued, there is no need to make a database request to verify a users authentication.
+5.Portable - A single token with multiple backends so as long as the backends all share the same signature or same secure key, then they can verify that the token
+is valid.
+
+Implementation:
+---------------
+1.Create a ITokenService interface and implement this interface in TokenService class.Load this into dependency injection container and tells whats the lifetime
 and howlong this service will be alive for after we start our applications.
  Choices: 1.Sinngleton -> once it is created or instantiated and then it doesnot stops until our application stops.(i.e.It continues to use the resource)
 	  2.Scoped     -> it is scoped to the life time of the http request.Best for API and dealing HTTP requests
@@ -157,9 +131,11 @@ Reason for Using an Interface :It is easy to mock an interface(Testing) and best
 			       allow programmers to write and unit-test functionality in one area without calling complex underlying or collaborating classes.
 
 For JWT Authentication:Install
-1.System.IdentityModel.Token.JWT by Microsoft version 6.12.0(stable version)
-2.Microsoft.AspNetCore.Authentication.JwtBearer version 3.1.16
+1.System.IdentityModel.Token.JWT by Microsoft version 6.12.0(stable version) --> to use jwt
+2.Microsoft.AspNetCore.Authentication.JwtBearer version 3.1.16   --> to add authentication middleware in our application
 Call UseAuthentication() before UseAuthorization()
+3.SymmetricSecurityKey    --> Symmetric encryption is the type of encryption where only one key is used to both encrypt and decrypt electronic information.
+  UnSymmetricSecurityKey  --> UnSymmetric encryption is the type of encryption where pair of keys(one public and other one is private) used for encrypt and decrypt electronic information.
 
 Extension Method:
 -----------------
@@ -168,42 +144,11 @@ Extension Method:
 3.Define a static method
 4.makes the startup class more clean and readable.
 
-Before Using Extension Methods:(Dependency Injection Container look line)
--------------------------------
-public void ConfigureServices(IServiceCollection services)
-        {
-            //For Database Operation
-            services.AddDbContext<DataContext>(options =>
-            {
-                options.UseSqlServer(_config.GetConnectionString("DatingAppCon"));
-            });
-
-            //For Jwt Token Creation and Handling
-            services.AddScoped<ITokenService,TokenService>();
-
-            //For Authentication
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-            
-            //For CORS policy
-            services.AddCors();
-
-            services.AddControllers();
-        }
-
-
 Exceptions:
 ------------
 1.400 -> Bad Request
   401 -> UnAuthorize
+  403 -> User is Valid but not allowed
   404 -> No Data Found
   500 -> Internal Server Error
 
@@ -221,6 +166,247 @@ But it is not a good practice,write a common class(gives a standard error messag
 3.Create a middleware class
 a middleware contains: constructor which have RequestDelegate(determines which comes next),ILogger(to log our exception(useful information) into terminal) and
 IHostEnvironment(to check which env we are working dev or prod.)
+
+Seed Data - Add data to our database in a lazyway
+-----------
+
+Entity Relationship: (Add additonal properties and define a class for photos and define a property for this) then perform migration
+---------------------
+1.We have a AppUser Class with some properties and also we have a Photo property which is a seperate class..don't need to create seperate table...Ef will
+create a table for our photo class using attribute -> [Table("table_name")].
+2.When we migrate, EF create a table for photo class and also create a AppUserId as a foreign key,which is a primary key of AppUser class.Ef creates a relationship
+between our AppUser class and Phot class.
+This Migration done by Ef have some flaws:
+  i.  AppUserId = table.Column<int>(nullable: true) -->AppUserId is nullable which means Photo added to our database that has no association with a user.
+we wanted to get photos along with a user.
+  ii. onDelete: ReferentialAction.Restrict); --> If we delete a user,then the photos corresponds to the user is not deleted.
+To Resolve:
+  i.Manually Configure the entity
+  ii.Use Ef Conventions to decide how it to behave
+Here we use the 2nd approach
+1.Undo the migration
+2.Use Fully Defining The Relationship
+   i.Go to the photo entity and tell it about the AppUser class
+3.Perform migration 
+4.Now see
+  i.AppUserId = table.Column<int>(nullable: false) --> photo table have a relationship with AppUser table
+  ii.onDelete: ReferentialAction.Cascade);  -->Deleting a photo will be delete the corresponding user
+
+5.For automatic migration define it in the Program class. (before calling the Run() method) 
+
+Repository Pattern:
+----------------------
+1.Mediates between domain and datamaping layers
+Without Using this concept: (Controller access the DbContext)
+---------------------------
+	Web Server (client application)  makes a request and this request send to controller end point--> Controller in controller we inject DbContext
+--> DbContext it represents a session with database and it translate our logic (queries write in the controller) then post our data or fetching the data from db
+and return to client--> Database 
+
+By Using Repository Pattern (Controller access the Repository and the Repository access the DbContext , Encapsulate our logic, reduce the duplicate query logic)
+----------------------------
+Web Server (client application)  makes a request and this request send to controller end point--> Controller in controller we inject DbContext
+--> DbContext it represents a session with database and it translate our logic (queries write in the controller) then post our data or fetching the data from db
+and return to client--> Database 
+
+1.Seems unneccessary, because DbContext is also a kind of repository(represent db)..now we introduce Repository for controller...All the methods were write inside
+the Repository....for organizing and improve testing ability(use mocking framework for testing)
+2.For Example UserController,MessageController and LikesController all need to fetch users, if we not use repository we need to write same HttpGet method in
+each controller. If we use pattern,we can write once in our repository and needed controller can access this. 
+
+AutoMapper
+---------------
+1.Install Automapper.MicroSoft.DependencyInjection version 3.10
+2.It helps us to map from one object to another
+3.We can map in reverse also(like memberdto to appuser, in normal we map appuser with memberdto)
+
+Photo  Upload:
+---------------
+i.Photo Storage Option:
+------------------------
+1.Store the photos in a database as a binary large objects but it is not a greate use of a database and not an efficient at returning a binary object.It is always
+prefered to return an entity from a database.If number of photos increases,LBO will also increases and it may run as out of space leads to application crash
+(server can't able to store that).
+Reference: From API to DB --> https://stackoverflow.com/Questions/3548401/how-to-save-image-in-database-using-c-sharp
+---------  From DB to API --> https://stackoverflow.com/questions/21879973/image-save-and-retrieve-in-sql-server-in-asp-net-using-c-sharp
+
+2.File System On our Server is optimized for serving files.If we stored our files in file system,it is easy to return for them. Again it leads an space issue and
+need to careful how much files we are going to store in our files system on a server.
+	Note*: Storage is cheap however running out of space leads to an application crash.
+	       When we store our images into file system, do we need to care about the aspect ratio of our image? square images are easier to manage and use css is easy
+3.Using Cloud Storage --> storage is virtually unlimited.They provide the logic for transform the image into a shape(like square..)
+
+Cloudinary:(Install CloudinaryDotNet by Cloudinary.. latest stable)
+------------------------------------------------------------
+1.Client posted their images into our angular application and it calls the API
+2.Make sure that only authenticated user can upload/post their images to our server.
+3.API securely upload images into cloud storage.Cloudinary stores the photos and sends a response(photo URL and public ID of image) to our API
+4.Public Id and URL is stored in our database.This Id will send to API and API send this to client.(201 created response sent to the client with location header.)
+
+Add Resource to the Server and generate 201 response with Location Header: (Get the PhotoCollection)
+---------------------------------------------------------------------------
+1.Created() and CreatedAtRoute() method used to return 201 response
+
+Pagination:
+------------
+1.Helps avoid performance problems ---> don't need to send all the details to the users
+2.Parameters are passed by query string
+3.Page size should be limited --> If we have million users in our application but serve 50users at a time (Ex.Instagram)
+4.We should always page results
+
+Deferrred Execution:
+---------------------
+1.Bulding Expression Tree: Tree of expressions inside entity framework for a query,we build up a expression tree and we store this as an IQueryable of
+type whatever(like AppUser,MemberDto and so on).
+2.IQueryable can contain where clause,Take(),Skip(),OrderBy() (this is what used to achieve pagination).Nothing going to execute on a database at this point.
+Ex:
+---
+(BUILD EXPRESSION TREE/QUERY)
+IQueryable<AppUser>  ==>  var query =_context.Users.Where(x=>x.Gender==gender)
+						   .OrderBy(x=>x.UserName)
+						   .Take(5)
+					           .Skip(5)
+						   .AsQueryable()
+
+Here we build a query,when we execute the query using the following methods,
+
+(ACCESS DATABASE)
+Execution  ==>	query.ToListAsync()
+		query.ToArrayAsync()
+		query.ToDictionary()
+
+it will access the database and retrive specified data and displayed it on the application.Thus we achieve Pagination.
+
+**Note: Suppose we have million users,then we would take only five of those users from the database.
+
+3.Another way to execute the query is to use a SingletonQuery. Example for this is query.Count()
+
+Pagination Header:
+------------------
+1.Headers of Postman tells us our response is coming back from the server.
+2.Here add an additional header that contains the pagination information. we can get that information out of the header in the client side and use that to display
+the pagination information in the browser. 
+
+Filtering:
+------------
+1.Goals -> Exclude the current loggedIn user and Display the users of opposite gender
+
+Sorting:
+--------
+
+ActionFilter: (For Updating the LastActive Property)
+------------
+1.Allows us to do something even before the request is executing or after the request is executed. 
+2.Using IAsyncActionFilter 
+3.next property=> To execute the action(context) and then do something after this is executed.
+3.We need a token for authorization ,instead of using GetUserbyUsernameAsync() method which includes a photo ,here photo not required for ActionFilter.So we can
+use GetUserByIdAsync() method which find an entity based on the given primarykey value.
+
+Adding Like Feature:
+----------------------
+1.Many to many relationship
+2.Likes: i)one is going to be a list of users that they like and another one is going to be a list of users that have liked that user.
+
+
+
+ASP.net Identity:
+-----------------------
+1.Upto now I can able to signup,login and logout perfectly then why should I use ASP.net identity?
+2.Battle hardened, written and tested by Microsoft(used over 7years).
+3.Comes with a password hasher with 10,000 salt iterations.
+4.Full framework for managing members and roles.
+5.Provides an entity framework schema to create the needed tables.
+6.Highly customisable.
+
+Features:
+-----------
+1.Entity must inherit the IdentityUser class(by default identityuser uses a string as a primarykey.)
+2.It provides Id,UserName and Password column by default.
+3.It provides UserManager<T> to manage the users, SignInManager<T> for signin and RoleManager<T> for give roles to the users.
+
+IdentityUser:
+--------------
+
+
+IdentityRole:
+--------------
+1.Each appuser can be in multiple roles and each role can contain multiple users.
+
+*** install IdentityDbContext from Nuget Package Manager. (Microsoft.AspNetCore.Identity.EntityFrameworkCore version 3.1.16)
+
+AddIdentity()
+--------------
+1.If we buid an MVC application, choose this.Because in MVC type application where our client side of the application was being served by dot net and  we would use
+rasor pages, which are then served by the dot net server, then we could use the default identity and this would give us a full setup. It would gives us the page
+we need.It would give us cookie based authentication because then the  user is always maintaining a session with the server,because the server pages or the html is
+being generated from the server itself. 
+
+
+AddIdentityCore()
+-------------------
+1.If we build an application using dotnet,our view is served by angular(Single Page Application SPA) and we're using token based authorization,
+then we will use AddIdentityCore().By using this we can get the basic structure and also we can add extra configurations to it.
+
+Validation Paramters:
+------------------------
+1.Reference --> https://stackoverflow.com/questions/47988003/how-to-customize-asp-net-identity-core-username-to-allow-special-characters-and/47989334
+
+Add Role:
+---------
+1.Role for Admin
+2.Role for Moderator
+3.Role for Member
+
+SignalR:
+-------------
+1.Opensource library that provides realtime web functionality to our apps.
+2.Good for
+	i.   Dashboard and monitor apps
+	ii.  Collaborative apps
+	iii. Apps that require notifications
+	iv.  Chat apps
  
- 
-    
+Features:
+------------
+1.Handles connection management automatically. When our clients connect to a hub, then signal going to handle the connection management for us.
+It's also going to allow the clients to reconnect automatically. If there's any problems with their network or a problem in the server, then the clients are 
+automatically going to  try to reconnect to the server.
+2.It can send message to all connected clients simultaneously or it can send message to specific clients or group of clients.
+3.Supports:
+	WebSockets
+	Server-Sent Events
+	Long Polling
+4.Offers client side npm package
+5.Process:SignalR always have a details of users who are in online and If a new user connects to SignalR hub, Hub notifies all connected users that new user has
+comes to online and this will update on all client browsers.
+
+Authentication in SignalR:
+---------------------------
+1.Add Authorize attribute on the PresenceHub class.
+2.SignalR and websocket cannot send an authentication header, we have to use query string in signalR.
+3.Add query string in identityservice extension inside AddAuthentication method.
+4.SignalR send up the token as a query string with the key of "access_token". 	
+5.Add .AllowCredentials() in our CORS policy. so that now we can send up the access token.
+
+Find the connected user:
+--------------------------
+1.There is no way to find out who is connected inside here(OnConnectedAsync() method). Microsoft not implemented this functionality for a specific reason that because
+we were in webfirm and we had  more than web server, we would have no way to getting the connection information from the other server. This service is confined with
+the server that it's running on.
+
+Ways:
+-----
+1.The most scalable way is -->where you store the tracking information in a database which can be distributed among many different servers.
+2.The second way is to create a class that's going to track who has connected and store that in a dictionary.(not working on a multiple server, to achieve use ReedUs)
+
+Unit Of WorkPattern:
+---------------------
+1.Unit Of Work: Maintains a list of objects affected by a business transaction and coordinates the writing of changes.
+2.Transaction: When a request comes into our API, then it is considered as transaction.(may be we fetch data from db or update data into the db) and at the 
+end of the request we write this changes into the database.
+
+
+Want to know:
+--------------
+1.Want to get clear idea about auto mapper, photo upload and update profile
+2.want to get clear idea about how we give relationship schema to a table in database

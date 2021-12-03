@@ -1,5 +1,9 @@
-Udemy Course - Asp.net core with Angular (Github Link --> https://github.com/TryCatchLearn/DatingApp)
+Udemy Course - Asp.net core with Angular (Github Link --> https://github.com/TryCatchLearn/DatingApp) (Lesson 8 and 10 need to understan it more clear)
 ------------------------------------------
+
+****Front End --> Give a request to the API with sufficient parameter and process the observable in an efficient manner.
+
+
 1.Structural Directives --> modifies the domain object model in our html in someway (*ngFor,*ngIf,*dropdown-menu)
 2.Angular is a casesensitive
 3.Angular vs JQuery (DOM Manupulation issue)
@@ -24,18 +28,22 @@ Important commands for skip html/css/test file creation:
 
 TemplateForms:
 ---------------
-1.Two-Way Binding: We can bind data or properties in our component and display them in our templates and we can take data from something enters in the form and
-update something inside our component. (ts file(.ts) --> template file(.html) & template file(.html)-->ts file(.ts))
+1.Two-Way Binding: We can bind data or properties in our component and display them in our templates and we can take data from something enters in the 
+form and update something inside our component. (ts file(.ts) --> template file(.html) & template file(.html)-->ts file(.ts))
 2.One of the example is declare a variable users:any in ts file and user provided data in input field is taken and updated the users variable with the value
 which was entered in the form field by the user.
 3.Import FormsModule
 4.Create a variable inside the .ts file
-5.define #loginForm="ngForm" inside form tag which tells that we use angular form so that we can two way binding and also calls the method with appropriate event
-like click,submit,ngSubmit(which works on both hit the submit button and hit enter) .(ngSubmit)="login()"
+5.define #loginForm="ngForm" inside form tag which tells that we use angular form so that we can two way binding and also calls the method with 
+appropriate event like click,submit,ngSubmit(which works on both hit the submit button and hit enter) .(ngSubmit)="login()"
 5.define name property inside input tag
 6.Update the name property within the variable using two way binding syntax
 7.Square Brackets --> for receiving from our components
   Parantheses --> data goes away (we are going from our template to our components).
+8.Template Driven Form with Validation -->https://jasonwatmore.com/post/2018/11/10/angular-7-template-driven-forms-validation-example
+					  https://www.freecodecamp.org/news/how-to-validate-angular-template-driven-forms/
+					  https://angular.io/guide/form-validation
+					  https://angular.io/guide/forms
 
 Feature of using Service file in our Angular Application:
 ---------------------------------------------------------
@@ -62,6 +70,10 @@ Observables:
 	              synchronous 					       asynchronus
 
 6.Pipe -> If you want to transform the stream of data of observable before we subscribe this we can use pipe(rxjs for angular)
+ => .pipe(take(1)) --> we say that we want to complete after we've received one of these current users.This way we don't  need to unsubscribe, because once an observable
+has completed, then we are effectively not subscribe to anymore.
+ => whenever we're not sure if we need to unsubscribe from something,we can add this syntax (.pipe(take(1))
+ => we have a guarantee that we unsubscribed from that. 
 7.On subscribing the observable,  we have 3 parts: response(data in the observable)res=>{},error(anything other than 200OK response)error=>{},additional()=>{}
 8.Other than subscribe we have toPromise() method.It comes from JavaScript -->another way to get data from observable
 9.async pipe subscribe and unsubscribe automatically from the observables.
@@ -99,9 +111,10 @@ Angular Toastr Service:
 
 Route Guard:
 --------------
-1.ng g guard auth 
+1.ng g guard auth (before moving into the route, check the user is loggedIn then only we give access to that route for this kind of situation we can use guards)
 Guard Provides 4 interface --> canActivate, canDeactivate, CanActivateChild, canLoad 
-select canActivate interface --> activate the route or not. If all guards return true, navigation continues.If any guard return false,then the navigation is cancelled.
+select canActivate interface --> activate the route or not. If all guards return true, navigation continues.It protect the resource
+If any guard return false,then the navigation is cancelled.
 
 ng-container --> does not generate any html..not interfere with any html elements..best when you use conditional statements
 npm install bootswatch --> for free bootstrap theme   reference --> https://bootswatch.com/
@@ -109,12 +122,13 @@ npm install bootswatch --> for free bootstrap theme   reference --> https://boot
 2.create a seperate file for storing third-party modules(other than angular specific modules) to make app module to simple and tidy.
 
 Error Handling(using interceptors):
----------------
+--------------------------------------
 1.When we encountered any error(400,401,404,500...) in our angular application,we handle them at a global level inside our application.To achieve this using
 Http Interceptors.
 2.ng g interceptor then give a name.
 intercept(intercept the request that goes out, the response that comes back in the next where we handle the response) method --> it returns an observable
 so we can perform operations using pipe().
+3.Interceptors are initialized when the application is start
 catchError(rxjs operator) -->catch the error response(HttpErrorResponse)
 modalStateErrors????
 
@@ -124,5 +138,122 @@ providers: [
   ],
 multi -> we don't want to replace the interceptor comes with angular..we want to add this to the interceptors.
 we can have multiple interceptors 
-es2018 and es2019..????
+es2018 and es2019..????   To flatten the array --> flat(); available in es2019
 ? -> optional chaining parameter
+
+Learn More About TypeScript:
+-------------------------------
+1.Type Safety --> let data=42; (data will be integer,change it to "42" it will be string)
+2.JSON to TS --> https://transform.tools/json-to-typescript
+
+Add NPM_GALLERY: --> https://www.npmjs.com/package/@kolkov/ngx-gallery - follow the instructions
+---------------
+es2015
+<ngx-gallery [options]="galleryOptions" [images]="galleryImages"
+                style="display:inline-block;margin-bottom:20px;"></ngx-gallery>
+
+FileUpload:
+------------
+npm install ng2-file-upload --save
+https://www.freecodecamp.org/news/how-to-make-image-upload-easy-with-angular-1ed14cb2773b/
+
+Usage of RoutingParams:
+-----------------------
+
+Edit Profile:
+-----------------
+Usage of dirty property:
+
+Can Deactive: (works within the angular components)
+-------------
+1.User modify some content in edit component(form) and he not click the save changes button....when user move to other component and come to this edit component
+changes are gone..user need to type it again....in order to overcome this we can show a alert box to the user(we can style this aswell)
+
+HostListener:(works within the angular application,when we close the application tab,it shows the warning)
+-----------
+Persisting the Changes in API:
+-----------------------------
+
+Loading Indicators: 
+-------------------
+1.To make the API to slow,To add fakeoury or some delay.
+2.ng add ngx-spinner
+3.npm install @angular/cdk
+4.Define spinner using show() and hide() method and use this using interceptor.
+
+Reactive Forms in Angular:
+---------------------------
+1.It is built around observable streams where form input and values are provided as streams of input values which can be accessed synchronously.
+2.FormGroup contains form control
+3.All our formcontrol derived from AbstractControl
+4.type="date" not works with safari browser and gives a different user experience in windows and mac.So we can use BsDatepicker from ngx-bootstrap 
+
+For ReUsable Code:
+------------------
+1.ControlValueAccessor -->It is an interface act as a bridge between angular form API and native element(formContrlolName) in the DOM.
+2.We can access the formControlName property from component by implementing this interface.
+
+For Date Time Display:
+---------------------
+1.https://www.npmjs.com/package/ngx-timeago - TimeAgo
+
+Inputs:
+------------
+1.Grid View and List View
+2.Avoid Multiple Click -> achieve using disabled
+3.Concentrate in Date Validation 
+4.Add Validation to all the fields.
+
+Using Service to store the data:
+-----------------------------------
+1.Loading indicators -> whenever we make a API call, it go fetch data from database.so the loading indicators displayed.
+2.We don't have a details in the cache , we have to go to our API. 
+Idea:
+----
+1.Members:
+-----------
+i.we go to our API, we go and get our members if we don't have them in our cache.But if we have them in our cache, in the query is identical, then we just retrieve
+this from our cache.
+2.Individual Members:
+---------------------
+i.now we have Map(key value pair), so we need to extract a member out of there,if we have got in the cache
+
+Route Resolvers:
+----------------
+1.Whenever the component gets loaded, we need to make a backend call for data after getting the data then show the component.
+It allows us to access the data before the component is constructed.
+2.ng g -h --> ng g resolver
+3.It instantiated in a same way as the service is instantiated
+4.There is no way to access the navigation extrass inside this.
+5.It not restrict the component to load or not, it allow the component load before getting the data from datasource and then send the data to the component.
+
+Directive in Angular:
+----------------------
+
+SingalR:
+------------
+1.npm install @microsoft/signalr --> to configure and work with SignalR in client side
+2.Add hub url in the environment.ts
+3.
+
+Want to know:
+--------------
+1.Want to get clear idea about advanced concepts in angular routing, interceptors, guards and decorators
+2.Show password icon
+3.Forget password
+4.During Register, asks three questions,based on the question answers provide the password
+5.Send credential to email
+6.If user enters 5, displaay 5 input tags and read values from the field.
+
+ngx-spinner:
+-------------
+1.square-spin
+2.square-jelly-box
+3.cube-transition
+4.ball-triangle-path
+5.ball-spin-clockwise - good
+6.ball-fussion
+
+
+
+

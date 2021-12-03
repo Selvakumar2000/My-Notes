@@ -1,0 +1,78 @@
+App Feature:
+---------------
+1.User with Admin Role, Member Role and GoldMember
+
+API:
+-------
+1.Required Packages downloaded for EF, Identity, Automapper and JWT and version is 3.14
+2.CloudinaryDotNet latest stable installed.
+
+Insert Product Details JSON:
+--------------------------------
+{
+	"ProductName" : "Rebook Flex",
+	"SupplierId"  : 2,
+	"SupplierName" : "SelvakumarSK",
+	"ProductBrand" : "Rebook",
+	"ProductDescription" : "Best for youth",
+	"AmountRs" : "1200",
+	"OriginalPrice" : 2999,
+	"Discount" : 30,
+	"Category" : "Shoes",
+	"Gender" : "Male"
+}
+
+
+	@ProductId,
+	@ProductName,
+	@SupplierId, 
+	@SupplierName,
+	@ProductBrand,
+	@ProductDescription,
+	@AmountRs,
+	@AmountWords,
+	@Discount,
+	@Category,
+	@Gender,
+	@PhotoUrl,
+	@PhotoPublicId
+
+{ProductId : 1,	ProductName : Shoe,SupplierId:1,SupplierName : Selva,
+ProductBrand : Adida,ProductDescription : The next generation of the web’s favorite icon library,AmountRs : 1599,AmountWords : Thousand Five Hundred and Ninety Nine Only,Discount : 30,Category : Shoes,Gender : Male
+}
+}
+
+@ProductId,@ProductName,@SupplierId,@SupplierName,@ProductBrand,@ProductDescription,@AmountRs,@AmountWords,@Discount,@Category,@Gender,@PhotoUrl,@PhotoPublicId
+
+ProductId,ProductName,SupplierId,SupplierName,ProductBrand,ProductDescription,AmountRs,AmountWords,Discount,Category,Gender,PhotoUrl,PhotoPublicId
+
+	{
+        "ProductId" : "1",
+	"ProductName" : "Shoe",
+	"SupplierId"  : "1",
+	"SupplierName" : "Selva",
+	"ProductBrand" : "Adida",
+	"ProductDescription" : "The next generation of the web’s favorite icon library",
+	"AmountRs" : "1599",
+	"AmountWords" : "Thousand Five Hundred and Ninety Nine Only",
+	"Discount" : "30",
+	"Category" : "Shoes",
+	"Gender" : "Male"
+	}
+
+
+
+
+Angular:
+---------
+1.LazyLoading implemented
+2."strictPropertyInitialization": false,
+  "strictNullChecks":false, 
+  "strict": false,  and
+  "strictTemplates": false  in "angularCompilerOptions"
+
+1.Sidebar optimization
+2.App logo maintain throughout the application
+3.Orders and user related details to be grouped(to the right side)
+4.
+

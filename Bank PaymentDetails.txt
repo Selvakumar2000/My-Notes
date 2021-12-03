@@ -48,7 +48,7 @@ Add Migration:
 ----------------
 =>Add-Migration "InitialCreate"  - to create migration file
 =>Update-Database                - create db through migration file
-
+=>Drop-Database 		 - drop the database in the server
 4.Add Controller to add API methods for PaymentDetail table
   Controllers --> add --> controller --> API Controller(with action using entity framework) --> Give modelclass name,context name,controller name.
 		if error comes,install visualstudio web.codegeneration utils

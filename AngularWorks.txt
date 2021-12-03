@@ -1,5 +1,47 @@
-I.
-1.Install Nodejs from google -->to check version node -v
+								Learn Angular:
+							----------------------------
+1.Framework to build client side application.
+2.Great For  Single Page Application where parts of the view get refreshed asynchronously without having reload the entire page.
+3.Any application that heavily relies on javascript, angular is a great choice.
+4.Features --> #Modular Approach #Reusable Code #Development Quicker and Easier(Routing,Forms and so on)  #Unit Testable #Angular is a product from Google and MS
+
+History: (Link -->https://en.wikipedia.org/wiki/Angular_(web_framework))
+---------
+1. Angular JS - 2010 (1.x)
+   Angular 2  - 2016 September (2.x.x)
+   Angular 4  - 2016 March (4.x.x)  (Note* : version 3 is skipped to avoid confusion due to the misalignment of the router package which was distributed in 3.3.x)
+   Angular 5  - 2017 November (5.x.x)
+   Angular 6  - 2018 May (6.x.x)
+   Angular 7  - 2018 October (7.x.x)
+   Angular 8  - 2019 May (8.x.x)
+   Angular 9  - 2020 February (9.x.x)
+   Angular 10 - 2020 June (10.x.x)
+   Angular 11 - 2020 November (11.x.x)
+   Angular 12 - 2021 May (12.x.x)
+
+In any framwork there is always room for improvements and same in the case with angular.
+Google team decided to  update the angular version twice a year and stick to semantic versioning.
+Semantic Versioning:
+--------------------
+1.Version  for example 10.2.9 in angular
+i.    10 is a major version number --> it changes when there is a break in any of the functionalities (in angular this version is changed twice a year by google team)
+ii.  .2 is a minor version number -->it increases when there are features added however it doesnot  break any functionality
+iii. .3 is a patch number  -->it increase anytime when there is a bug fix or some sort of patch
+
+Nodejs LTS installed and npm(node package manager comes along with)
+CLI -> command line interface.It allows to generate building blocks of angular application by typing a commands (i.e. ng commands)
+
+Angular Architecture:
+---------------------
+1.Angular App  -> one or more modules
+2.Module       -> One or more components and services
+3.Component    -> Html+css+ts
+4.Services     -> Business logic
+5.Modules interact and ultimately render the view in the browser.
+
+Commands:
+---------
+1.Install Nodejs from google -->to check version node -v and npm -v
 2.Install Angular and CLI -->npm install -g @angular/cli & to check version -->ng version
 3.Create Application -->ng new app_name
 4.Move to the Application -->cd app_name
@@ -10,6 +52,254 @@ I.
 	ii.add RoutingModule and forRoot() method into imports of app.module.ts file and create Routes array.
 	iii.add router-outlet tag where you want to display your content
 7.To open our project into vs code --> code .
+8.ng g p mypipe --> To create a custom pipe
+
+ngLifeCycle: (working example in angularmaterial project)
+-------------
+1.A component has a lifecycle mananged by angular.Angular
+	-->Creates the component
+	-->Renders the component
+	-->Creates and renders the component childern
+	-->Checks when the component data-bind properties change and
+	-->Destroys the component before removing it from the DOM
+2.To tap into and react when these lifecycle events occur, angular offers several lifecycle hooks, order in which these lifecycle hooks are specified is the order
+in which they executed.They are,
+
+  -->ngOnChanges*
+#Executes, every time the value of an input property changes. The hook method receives a SimpleChanges object containing current and previous property values.
+#This is called before ngOninit.This is the only method which receives input paramater of type simpleChanges. currentValue, firstChange and previousValue can be get
+from simpleChanges property.
+
+  -->ngOninit*
+#Executes, after the constructor and after ngOnChange hook for the first time. It is most commonly used for component initialization and retrieving data from db.
+#execute only during component initialization.
+#It is called which indicates that the angular is done creating the component.
+  
+-->ngDoCheck*
+#Executes, whenever the property or template anything changes in the component.
+	i.   ngAfterContentInit
+	ii.  ngAfterContentChecked
+	iii. ngAfterViewInit
+	iv.  ngAfterViewChecked
+
+  -->ngOnDestroy*
+#Executes, just before angular destroys the component and generally used for performing cleanup.
+
+ -->ngAfterContentInit*
+#Executes, only one time when the content is rendered on a page
+
+ -->ngAfterContentChecked*
+#Executes, whenever any changes in the component it executed and checked any changes occured?
+
+ -->ngAfterViewInit*
+#Executes, only one time after successful rendering of that component html it will execute
+
+ -->ngAfterViewChecked*
+#Executes, every rendering of that component html it will execute and checked any changes occur in the template
+	
+
+3.Steps to use the lifecycle hooks
+Step:1 Import the lifecycle hook interface
+Step:2 Make the component class implement the lifecycle hook interface
+Step:3 Write the implementation code for the lifecycle interface method. 
+
+bootstrap -->a technique of loading a program into a computer by means of a few initial instructions which enable the introduction of the rest of the program 
+--------
+
+Important Files:
+-------------------
+1.package.json -> contains the dependencies and dev dependencies which are the libraries/packages or modules that are required for our angular application.
+packages are get installed when we run the ng new command and all the packages get installed inside the node_modules folder.
+
+2.src folder -> contains app-root module and app-root component and main.ts and that main.ts file is a entry point to our application.It will bootstrap the
+appmodule and appmodule bootstrap the appcomponent --> app component have appcomponent-template and appcomponent.ts(which control the view logic)
+
+Component:
+----------
+have,
+1.Template --> view Html
+2.Class   --> properties and methods
+3.MetaData -->this is the information that angular needs to decide if the paricular class is in fact an angular component or just a regular class.It is defined
+using decorator which is a feature in typescript.Decorator is just a function that provides an information about the function about the class attached to it and
+for the component we use the component decorator
+
+3ways to use the selector to display the component view:
+-------------------------------------------------------
+1.
+class file: selector: 'app-root',
+html file : <app-root> </app-root>
+2.
+class file: selector: '.app-root',
+html file : <div class="app-root">  </div>
+3.
+class file: selector: '[app-root]',
+html file : <div app-root>  </div>
+
+Attribute vs Property:
+----------------------
+1.Both are not same.
+2.Attributes are defined by html and Properties are defined by DOM(Document Object Model).
+3.Attributes initialise DOM properties and they are done. Attribute values cannot change once they are initialized.However property values can change.
+4.So binding in angular , we are binding to the property of the DOM element 
+$0.getAttribute('value');  --> not change
+$0.value --> did change with respect to the field value
+
+Directive:
+---------
+1.Directive is custom html attribute that angular provides.Structural Directive is used to add or remove Html elements (ngIf,ngFor,ngSwitch)
+2.ngClass directive is used to apply multiple classes based on the condition we provide.
+3.We need to import FormsModule from angular/forms
+3.If tou want to know abut the event like click,submit pass the event inside the method wwe call (click) = "welcome($event)"
+$event --> is a special variable in angular and it gives all the information about the DOM event that was raised.
+4.ng-template tag is a container for other elements like the ngIf directive can use to properly add or remove locks of html from the DOM.
+
+Custom Directive:
+------------------
+1.It is used for modify the DOM or modify the html element.(Ex. to show or hide conditionaly)
+2.ng g directive myDirective
+3.Custome Directive:[directive_name]
+4.Custom Structural Directive : *directive_name
+
+Two Way Binding:
+-----------------
+1.It allows us to update a property at the same time display the value of that property and to achieve this angular provide ngModel directive.
+2.When we work with form inputs, it is essential that our model and the view are always in sync otherwise the data might not be consitent.
+3.Ex: Consider a login form, this has a userName and password and the component class have the corresponding properties username and password whenever the
+user updates these input controls our model or properties should automatically receive those values and when there is an update in the model or property value
+the view should automatically reflect the updated values.
+
+Component Interaction:
+-----------------------
+1.By default app-component is a parent component and all other components are child component.
+2.In some cases parent component sends data to child component and vice versa.
+3.Component interaction is achieved by @Input() and @Output() decorators.
+4.@Input() decorator -> the child component can accept input from the parent component.
+5.@Output() decorator -> the child component will send out events to the parent component and indicate something.
+6.Task: Send name from the appcomponent to angular-features component and int the angular-features component we are going to display Hello and followed by the name
+for example "Selva" and similarly we are going to send message Hey Software Engineer from the angular-features component to appcomponent and display that message
+in that appcomponent. 
+7.For sending parent to child component interaction we have child component selector tag inside the parent component.So we can easily sends the data.For sending data
+from child to parent we don't have parent component selector inside the child component so we use events(EventEmitter) to sends data from child to parent.
+
+Pipes:
+------
+1.Allows us to transform the data before displaying them in the view.
+2.Aavailable pipe for String: lowercase, uppercase, titlecase, slice:index:limit (index denotes that where the string has to start.limit denotes where to stop)
+ For ex: slice:3:6 start at index 3 and ends before 6th index (include the index:exclude the limit), json
+3.Available pipe for Number: number, percent, currency
+4.Available pipe for date: date,short,shortDate,shortTime,medium,mediumDate,mediumTime,long,longDate,longTime
+5.Number pipe: The parameter has this syntax:
+
+{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}
+So example of '1.2-2' means:
+A minimum of 1 digit will be shown before decimal point
+It will show at least 2 digits after decimal point
+But not more than 2 digits
+
+Services:(Central Repository)
+------------------------------
+1.service is a class with specific purpose
+2.DRY(Do not Repeat yourself) Principle
+3.Single Responsibility Principle
+4.Shared Data across multiple components
+5.Implement Application logic
+6.External Interactions
+
+Dependency Injection:
+----------------------
+1.Injecting the Dependencies into the class is known as Dependency Injection.Instead of creating an instance using new keyword, we can inject the class
+using dependency injection concept in angular(define a property of type in the constructor)
+Define the EmplyeeService class --> Form the DataSource (like get all the employee details from DB)
+2.Register with Injector --> inside providers array but in angular12,we have provideIn injectable so don't need to define it inside app module.
+3.Declare as dependency in EmpList and EmpDetails --> specify it in the constructor of required class
+4.@Injectable() decorator --> this tells angular that this service might itself have injected dependencies.
+So if we want to inject a service into another service,
+injectable decorator is must.mostly all services are independent only it depends with root.it is must for service not for component
+5.Reference -> https://www.youtube.com/watch?v=OFPIGlxunL0&list=PLC3y8-rFHvwhBRAgFinJR8KHIrCdTkZcZ&index=18
+            -> https://www.youtube.com/watch?v=69VeYoKzL6I&list=PLC3y8-rFHvwhBRAgFinJR8KHIrCdTkZcZ&index=19
+
+HTTP Mechanism:
+---------------
+	EmpList(component)  
+
+						                    Get			           Request                Server
+			    	 	                        ------------->			------------->
+			-------------->	    EmpService                              Http                                 (Server Layer)        DB
+								<-------------	                <-------------	
+							          Observable		           Response
+
+
+	EmpDetail(component)
+
+1.Components are make use the service class for the data.
+2.Http request accesss the WebAPI or WebService to fetch the data from the DataBase and it send it send back as an HTTP response and the response we get back
+from the http call is an observable.Now the service fill needs to cast this observable into an array of employees(in this case) and return to it components.
+
+Observable:
+------------
+1.Observables is a sequence of items that arrive asynchronously over time and observale is a HTTP response arrives asynchronously from db to service.
+2.Newspaper company rely on datasource and form a data in the newspaper such as headline,body,cricketnews and so on and then sends it to the house only
+they are subscribe to this newspaper.subscriber some time read the newspaper or sometime they make use of this paper for other works.
+(another example: only subscribed user will receive videos from the subscribed youtube channel.once the youtube channel
+sends the video to the subscribers their work done,it is not neccessary does every subscriber needs to watch).
+3.Similarly servicee receives an observable and process it.Only subscribed user can read the data.
+4.RxJS(Reactive Extensions for JavaScript) is a librarry which enables us to work with observables.
+5.Observable which sending the data and observer who receives and work with that data. It is imported from rxjs library.
+ 
+Routing:
+----------
+1.<base href="/"> in index.html is required so that the application knows how to construct the URLs to navigating.
+2.wildcard route(**) must be at last position.
+3.Configure Routes Array with most specific at top and least specific at bottom.
+4.path: '' , redirectTo: '/departments', pathMatch:'prefix' -> empty path is prefix to anypath pathMatch:'full' -> redirect only if full url is empty
+5.Route Parameters Reference --> https://www.youtube.com/watch?v=qh5nHv-4aw0&list=PLC3y8-rFHvwhBRAgFinJR8KHIrCdTkZcZ&index=25 
+
+Template Driven Form: ngForm directive gives us all the information about the form.
+---------------------
+1.Template reference variable with ngForm
+2.Two way binding
+3.Validation:
+
+		State 							Class if true 					Class if false
+	The control has been visited 					ng-touched 					ng-untouched
+	The control's value has changed  				ng-dirty 					ng-pristine
+	The control's value is valid 					ng-valid 					ng-invalid
+
+ngModel Properties:
+------------------
+		    Class  			 Property
+		ng-untouched 			untouched
+		ng-touched 			touched
+		ng-pristine 			pristine
+		ng-dirty 			dirty
+		ng-valid			valid
+		ng-invalid 			invalid
+
+4.novalidate ->this will prevent browser validation from kicking in when the click on the submit button
+
+Reactive Forms:
+--------------
+1.Code and Logic resides in the component class
+2.No two way binding
+3.Well suited for complex scenarios
+4.Dynamic form fields
+5.Custom validation
+6.Dynamic validation
+7.Unit Test
+8.Entire form is represented as FormGroup and each form field is represented as FormControl class.
+9.FormBuilder is a service by using this service we don't need to use FormGroup and FormControl classes.We can reduce the number of lines as well.
+10.FormArray class makes it possible to maintain a dynamic list of controls.
+
+Angular Material:
+------------------
+1.UI component library and provides us with components to build awesome user interfaces in quick time.
+2.It is an implementation of Google's material design specification.
+3.ng add @angular/material --> To add material into our project
+4. dbdcdd
+5.rgb(243, 242, 242)
+6.2px solid rgb(190 190 191)
+7.(opened)="openMep(true)" (closed)="closeMep(false)"
+
 II.
 1.Files and Folder in Angular
 i.package.json
@@ -47,14 +337,8 @@ VI.Module
 i.Example User Authentication Module have signup,login and forgot password component and have api services and helpers pipes
 ii.we have to register each module inside app.modules file
 
-VI.
+VII.
 1.ng add @ng-bootstrap/ng-bootstrap -->Install boostrap
 2.ng add @angular/material or ng add @angular/material@6.2.1 and npm ls @angular/material-->to know the version
 
 
-                    Project -1 =>Dating Portal Development
--------------------------------------------------------------------------------------------------
-1.Create default angular project and install angular meterial and bootstrap in it.
-
-To know about...
-i.ng container,position:relative attribute in css 

@@ -1,0 +1,25 @@
+MVC Authentication Application:
+---------------------------------
+
+Requirements:
+--------------
+1.Add Microsoft.VisualStudio.Web.CodeGeneration.Design, Microsoft.AspNetCore.Identity.UI, Microsoft.EntityFrameworkCore.Design, Microsoft.EntityFrameworkCore.SqlServer 
+(version 3.14 or 3.15)
+2.The ASP.NET Core Identity UI includes a "Download Personal Data" page, which uses the [PersonalData] attribute to help determine what to include in the download.
+
+Active Tab(jQuery):
+--------------------
+<script>
+    $(function () {
+        var current = location.pathname;
+        $('.nav-tabs li a').each(function () {
+            var $this = $(this);
+
+            if (current.indexOf($this.attr('href')) !== -1) {
+                $this.addClass('active');
+            }
+        })
+    })
+</script>
+
+

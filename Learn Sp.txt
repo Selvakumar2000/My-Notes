@@ -1,0 +1,66 @@
+SQL and STORE PROCEDURE:
+------------------
+
+1.SET NOCOUNT ON : 
+-------------------
+=>It is a set statement which prevents the message which shows the number of rows affected by T-SQL query statements. 
+This is used within stored procedures and triggers to avoid showing the affected rows message.
+
+2.WITH (NOLOCK) : 
+------------------
+=>Use nolock when you are okay with the "dirty" data. Which means nolock can also read data which is in the process of being 
+modified and/or uncommitted data.The WITH (NOLOCK) table hint is used to override the default transaction isolation level of the table or the tables
+within the view in a specific query, by allowing the user to retrieve the data without being affected by the locks, on the requested data, due to 
+another process that is changing it.
+
+3.VARCHAR vs NVARCHAR : 
+------------------------
+=>If you have requirements to store UNICODE or multilingual data, nvarchar is the choice. Varchar stores ASCII data and should be your data type of choice for normal 
+use. Regarding memory usage, nvarchar uses 2 bytes per character, whereas varchar uses 1.varchar is stored as regular 8-bit data(1 byte per character) and nvarchar 
+stores data at 2 bytes per character. Due to this reason, nvarchar can hold upto 4000 characters and it takes double the space as SQL varchar.
+
+
+%TEMP%   SELECT ALL AND SHIFT DELETE  ----> To increase the system speed.
+
+4.SQL Constraint:
+------------------
+=>NOT NULL Constraint − Ensures that a column cannot have NULL value.
+=>DEFAULT Constraint − Provides a default value for a column when none is specified.
+=>UNIQUE Constraint − Ensures that all values in a column are different.
+=>PRIMARY Key − Uniquely identifies each row/record in a database table.
+=>FOREIGN Key − Uniquely identifies a row/record in any of the given database table.
+=>CHECK Constraint − The CHECK constraint ensures that all the values in a column satisfies certain conditions.
+=>INDEX − Used to create and retrieve data from the database very quickly.
+
+Note**  -->Constraints can be specified when a table is created with the CREATE TABLE statement or you can use the ALTER TABLE statement to create constraints
+even after the table is created.
+       -->Any constraint that you have defined can be dropped using the ALTER TABLE command with the DROP CONSTRAINT option.
+
+5.Integrity Constraints :
+---------------------------
+=>It is used to ensure accuracy and consistency of the data in a relational database. Data integrity is handled in a relational database through the concept of
+referential integrity.There are many types of integrity constraints that play a role in Referential Integrity (RI).
+=>These constraints include Primary Key, Foreign Key, Unique Constraints and other constraints which are mentioned above.
+
+6.JOIN:
+----------
+=>INNER JOIN   − returns rows when there is a match in both tables.They are also referred to as an EQUIJOIN.
+=>LEFT JOIN    − returns all rows from the left table, even if there are no matches in the right table.
+=>RIGHT JOIN   − returns all rows from the right table, even if there are no matches in the left table.
+=>FULL JOIN    − returns rows when there is a match in one of the tables.FULL JOIN combines the results of both left and right outer joins.
+	         The joined table will contain all records from both the tables and fill in NULLs for missing matches on either side.
+**Note:  -->If your Database does not support FULL JOIN (MySQL does not support FULL JOIN), then you can use UNION ALL clause to combine these two JOINS as shown below.
+SQL> SELECT  ID, NAME, AMOUNT, DATE
+   FROM CUSTOMERS
+   LEFT JOIN ORDERS
+   ON CUSTOMERS.ID = ORDERS.CUSTOMER_ID
+UNION ALL
+   SELECT  ID, NAME, AMOUNT, DATE
+   FROM CUSTOMERS
+   RIGHT JOIN ORDERS
+   ON CUSTOMERS.ID = ORDERS.CUSTOMER_ID
+
+=>SELF JOIN    − is used to join a table to itself as if the table were two tables, temporarily renaming at least one table in the SQL statement.
+
+=>VARBINARY CONVERSION
+    UPDATE RFQ.RFQAttachmentContent SET AttachmentContent =CONVERT(varbinary, 'content') WHERE AttachmentContentID=2;

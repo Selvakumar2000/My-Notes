@@ -1,0 +1,109 @@
+#include <Stepper.h>
+const int stepsPerRevolution = 90;
+// change this to fit the number of steps per revolution
+// for your motor
+// initialize the stepper library on pins 8 through 11:
+Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
+//dc motor pin declaration
+int dcmotoren = 5;//enable pin used for control the speed
+int dcmotorin1 = 6;
+int dcmotorin2 = 7;
+void setup() {
+  Serial.begin(9600);
+  pinMode(dcmotoren,OUTPUT) ;  
+  pinMode(dcmotorin1,OUTPUT) ;   
+  pinMode(dcmotorin2,OUTPUT) ;
+}
+
+char grains= 0;
+
+void loop() {
+    readVal:
+      grains= Serial.read();       // get the value
+      stepperHasRun = true;	
+  
+    // check if a number was received
+    if ((grains>= '0') && (grains <= '4')) {
+      Serial.print("Number received: ");
+      Serial.println(grains);
+
+      if(grains==1)
+      {
+	while(stepperHasRun) 
+	{
+		// step one revolution in one direction:
+          	Serial.println("Serving Turmeric Powder");
+           	myStepper.step(20);//clockwise
+           	delay(1000);
+           	motorcontrol();
+           	delay(1000);
+   		stepperHasRun = false;
+	}
+	myStepper.step(-20);//move to intial position  
+	goto readVal;         
+      }
+
+      else if(grains==2)
+      {
+	while(stepperHasRun) 
+	{
+		// step one revolution in one direction:
+          	Serial.println("Serving Turmeric Powder");
+           	myStepper.step(40);//clockwise
+           	delay(1000);
+           	motorcontrol();
+           	delay(1000);
+   		stepperHasRun = false;
+	}
+	myStepper.step(-40);//move to intial position   
+	goto readVal;    
+      }
+
+      else if(grains==3)
+      {
+	while(stepperHasRun) 
+	{
+		// step one revolution in one direction:
+          	Serial.println("Serving Turmeric Powder");
+           	myStepper.step(60);//clockwise
+           	delay(1000);
+           	motorcontrol();
+           	delay(1000);
+   		stepperHasRun = false;
+	}
+	myStepper.step(-60);//move to intial position    
+	goto readVal;   
+      }
+
+      else if(grains==4)
+      {
+        while(stepperHasRun) 
+	{
+		// step one revolution in one direction:
+          	Serial.println("Serving Turmeric Powder");
+           	myStepper.step(80);//clockwise
+           	delay(1000);
+           	motorcontrol();
+           	delay(1000);
+   		stepperHasRun = false;
+	}
+	myStepper.step(-80);//move to intial position
+	goto readVal;  
+      }
+ 
+     else
+     {
+      	Serial.println("It is not available in the limit");
+     }
+
+}
+
+void motorcontrol()
+{
+  analogWrite(dcmotoren, 255);//fix the speed in maximum 
+  digitalWrite(dcmotorin1, HIGH);//forward(clockwise)
+  digitalWrite(dcmotorin2, LOW);
+  delay(20000);
+  digitalWrite(dcmotorin1, LOW);//backward(anti-clockwise)
+  digitalWrite(dcmotorin2, HIGH);
+}

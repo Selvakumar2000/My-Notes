@@ -1,0 +1,3 @@
+1.use of name attribute in input tag in two way binding
+2.class and interface in typescript
+3.synchrounus and async method in c#
